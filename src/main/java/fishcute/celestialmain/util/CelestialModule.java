@@ -90,6 +90,10 @@ public class CelestialModule {
                             Util.getBiomeBlend(Arrays.stream(arr.toArray()).toArray(String[]::new)), -1))
                     .with("distanceToBiomeFlat", new Function((List<Object> arr) ->
                             Util.getBiomeBlendFlat(Arrays.stream(arr.toArray()).toArray(String[]::new)), -1))
+                    .with("numberFromNBT", new Function((List<Object> arr) -> 
+                            Util.getDoubleFromPlayerNBT((String) arr.get(0), null), 1))
+                    .with("numberFromNBT", new Function((List<Object> arr) -> 
+                            Util.getDoubleFromPlayerNBT((String) arr.get(0), (Double) arr.get(1)), 2))
                     .with("rightClickingWith", new Function((List<Object> arr) ->
                             Util.isUsing((String) arr.get(0)) ? 1.0 : 0.0
                             , 1))

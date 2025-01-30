@@ -1,6 +1,7 @@
 package fishcute.celestialmain.api.minecraft;
 
 import fishcute.celestialmain.api.minecraft.wrappers.IResourceLocationWrapper;
+import net.minecraft.nbt.CompoundTag;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +32,7 @@ public interface IMinecraftInstance {
     float getViewXRot();
     float getViewYRot();
     float getCameraLookVectorTwilight(float h, float rotate);
+    CompoundTag getPlayerNBT();
     float getRenderDistance();
     float getMoonPhase();
     float getSkyDarken();

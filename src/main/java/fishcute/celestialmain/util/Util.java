@@ -4,9 +4,16 @@ import celestialexpressions.Module;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import fishcute.celestialmain.api.minecraft.IMcVector;
 import fishcute.celestialmain.sky.CelestialSky;
 import fishcute.celestialmain.version.independent.Instances;
+import net.minecraft.commands.arguments.NbtPathArgument;
+import net.minecraft.nbt.NumericTag;
+import net.minecraft.nbt.Tag;
+
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.imageio.ImageIO;
@@ -16,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -356,6 +364,32 @@ public class Util {
 
             this.alpha = point.alpha.invoke();
         }
+    }
+
+    public static List<Tag> getNBTTagFromPlayerByPath(String path) {
+        List<Tag> tags = null;
+
+        try {
+            tags = new NbtPathArgument().parse(new StringReader(path)).get(Instances.minecraft.getPlayerNBT());
+        } catch (CommandSyntaxException  e) {
+            throw new RuntimeException("Invalid NBT path: \"" + path + "\"");
+        }
+        
+        return tags;
+    }
+    public static double getDoubleFromPlayerNBT(String path, Double def) {
+        List<Tag> tags = getNBTTagFromPlayerByPath(path);
+        Tag tag = null;
+
+        try {
+            tag = tags.get(0);
+        } catch (IndexOutOfBoundsException e) {}
+
+        if (tag==null || !(tag instanceof NumericTag)) {
+            if (def==null) throw new RuntimeException("A numeric NBT value could not be found under path \"" + path + "\"");
+            return def;
+        }
+        return ((NumericTag)tag).getAsDouble();
     }
 
     public static boolean isUsing(String... item) {
